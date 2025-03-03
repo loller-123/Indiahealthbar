@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Health and Level with Bar and Notes</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 100vh;
+      margin: 0;
+      background-color: #f0f0f0;
+    }
+    .container {
+      text-align: center;
+    }
+    .player {
+      margin: 20px;
+    }
+    .player-name {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .level-container {
+      margin-bottom: 10px;
+      font-size: 18px;
+    }
+    .health-bar-container {
+      width: 300px;
+      height: 30px;
+      background-color: #e0e0e0;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      position: relative;
+    }
+    .health-bar {
+      height: 100%;
+      border-radius: 5px;
+      transition: width 0.3s ease, background-color 0.3s ease;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-weight: bold;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+    button {
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .note-section {
+      margin-top: 10px;
+    }
+    textarea {
+      width: 200px;
+      height: 50px;
+      margin-top: 10px;
+    }
+    .level-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Sven -->
+    <div class="player">
+      <div class="player-name">
+        Sven
+        <span id="levelSven" class="level-container">Level: 1</span>
+      </div>
+      <div class="health-bar-container">
+        <div id="healthBarSven" class="health-bar"></div>
+      </div>
+      <div class="controls">
+        <button onclick="changeHealth('Sven', -5)">Decrease Health</button>
+        <button onclick="changeHealth('Sven', 5)">Increase Health</button>
+      </div>
+      <div class="level-controls">
+        <button onclick="changeLevel('Sven', -1)">-</button>
+        <span id="levelSvenDisplay">1</span>
+        <button onclick="changeLevel('Sven', 1)">+</button>
+      </div>
+      <div class="note-section">
+        <label for="noteSven">Last damage taken:</label><br>
+        <textarea id="noteSven"></textarea>
+      </div>
+    </div>
+
+    <!-- Nik -->
+    <div class="player">
+      <div class="player-name">
+        Nik
+        <span id="levelNik" class="level-container">Level: 1</span>
+      </div>
+      <div class="health-bar-container">
+        <div id="healthBarNik" class="health-bar"></div>
+      </div>
+      <div class="controls">
+        <button onclick="changeHealth('Nik', -5)">Decrease Health</button>
+        <button onclick="changeHealth('Nik', 5)">Increase Health</button>
+      </div>
+      <div class="level-controls">
+        <button onclick="changeLevel('Nik', -1)">-</button>
+        <span id="levelNikDisplay">1</span>
+        <button onclick="changeLevel('Nik', 1)">+</button>
+      </div>
+      <div class="note-section">
+        <label for="noteNik">Last damage taken:</label><br>
+        <textarea id="noteNik"></textarea>
+      </div>
+    </div>
+
+    <!-- Yannic -->
+    <div class="player">
+      <div class="player-name">
+        Yannic
+        <span id="levelYannic" class="level-container">Level: 1</span>
+      </div>
+      <div class="health-bar-container">
+        <div id="healthBarYannic" class="health-bar"></div>
+      </div>
+      <div class="controls">
+        <button onclick="changeHealth('Yannic', -5)">Decrease Health</button>
+        <button onclick="changeHealth('Yannic', 5)">Increase Health</button>
+      </div>
+      <div class="level-controls">
+        <button onclick="changeLevel('Yannic', -1)">-</button>
+        <span id="levelYannicDisplay">1</span>
+        <button onclick="changeLevel('Yannic', 1)">+</button>
+      </div>
+      <div class="note-section">
+        <label for="noteYannic">Last damage taken:</label><br>
+        <textarea id="noteYannic"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Object to store health and level for each player
+    let players = {
+      Sven: { health: 70, level: 1 },
+      Nik: { health: 70, level: 1 },
+      Yannic: { health: 70, level: 1 }
+    };
+
+    // Function to determine the color based on health
+    function getHealthColor(healthValue) {
+      if (healthValue >= 60) {
+        return 'green'; // Healthy
+      } else if (healthValue >= 30) {
+        return 'orange'; // Moderate health
+      } else {
+        return 'red'; // Critical health
+      }
+    }
+
+    // Function to update health bar for each player
+    function updateHealthBar(player) {
+      let healthValue = players[player].health;
+      let barWidth = (healthValue / 70) * 100; // Calculate the width percentage
+      let color = getHealthColor(healthValue); // Get color based on health
+
+      // Update the health bar width and color
+      let healthBar = document.getElementById(`healthBar${player}`);
+      healthBar.style.width = barWidth + '%';
+      healthBar.style.backgroundColor = color;
+      healthBar.innerHTML = healthValue; // Show health value inside the bar
+    }
+
+    // Function to update level display for each player
+    function updateLevel(player) {
+      let level = players[player].level;
+      let levelDisplay = document.getElementById(`level${player}`);
+      let levelDisplayText = document.getElementById(`level${player}Display`);
+      levelDisplayText.innerHTML = level;
+      levelDisplay.innerHTML = `Level: ${level}`;
+    }
+
+    // Function to change health and update the health bar
+    function changeHealth(player, amount) {
+      players[player].health += amount;
+      players[player].health = Math.max(0, Math.min(70, players[player].health)); // Clamp health between 0 and 70
+      updateHealthBar(player);
+    }
+
+    // Function to change level and update the level display
+    function changeLevel(player, amount) {
+      players[player].level += amount;
+      players[player].level = Math.max(1, Math.min(5, players[player].level)); // Clamp level between 1 and 5
+      updateLevel(player);
+    }
+
+    // Initialize health bars and level displays for all players
+    updateHealthBar('Sven');
+    updateHealthBar('Nik');
+    updateHealthBar('Yannic');
+    updateLevel('Sven');
+    updateLevel('Nik');
+    updateLevel('Yannic');
+  </script>
+
+</body>
+</html>
